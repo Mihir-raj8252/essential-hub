@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment | Essential Hub</title>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #ffffff; color: #000; font-family: 'Inter', sans-serif; margin: 0; }
+        .navbar { background: #000 !important; padding: 20px 0; }
+        .logo { color: #fff !important; text-decoration: none; font-weight: bold; letter-spacing: 1px; }
+        .payment-container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        h2 { font-size: 24px; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 30px; }
+        .payment-method { border: 1px solid #eee; margin-bottom: 15px; border-radius: 4px; overflow: hidden; }
+        .method-header { padding: 20px; background: #f9f9f9; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .method-header:hover { background: #f1f1f1; }
+        .method-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fff; }
+        .method-content.active { max-height: 500px; padding: 20px; border-top: 1px solid #eee; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+        .btn-verify { background: #000; color: #fff; border: none; padding: 10px 20px; cursor: pointer; font-size: 12px; }
+        .summary-box { background: #000; color: #fff; padding: 25px; margin-top: 30px; border-radius: 4px; }
+        .btn-place { width: 100%; padding: 18px; background: #fff; color: #000; font-weight: bold; border: none; cursor: pointer; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-content" style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; padding: 0 20px;">
+        <a href="index.html" class="logo">ESSENTIAL HUB</a>
+        <a href="cart.html" style="color: #fff; text-decoration: none; font-size: 13px;">Back to Bag</a>
+    </div>
+</nav>
+
+<div class="payment-container">
+    <h2>PAYMENT</h2>
+
+    <div class="payment-method">
+        <div class="method-header" onclick="toggleMethod('upi-form')">
+            <span>UPI (GPay, PhonePe, Paytm)</span>
+            <span>↓</span>
+        </div>
+        <div id="upi-form" class="method-content">
+            <input type="text" placeholder="Enter UPI ID (e.g. success@cashfree)">
+            <button class="btn-verify" onclick="alert('UPI ID Verified!')">VERIFY</button>
+            <button class="btn-place" style="background:#000; color:#fff;" onclick="startCashfreePayment('UPI')">PAY WITH UPI</button>
+        </div>
+    </div>
+
+    <div class="payment-method">
+        <div class="method-header" onclick="toggleMethod('card-form')">
+            <span>Credit / Debit Card</span>
+            <span>↓</span>
+        </div>
+        <div id="card-form" class="method-content">
+            <input type="text" placeholder="Card Number">
+            <div style="display: flex; gap: 10px;">
+                <input type="text" placeholder="MM/YY">
+                <input type="password" placeholder="CVV">
+            </div>
+            <button class="btn-place" style="background:#000; color:#fff;" onclick="startCashfreePayment('Card')">PAY WITH CARD</button>
+        </div>
+    </div>
+
+    <div class="payment-method">
+        <div class="method-header" onclick="toggleMethod('cod-form')">
+            <span>Cash on Delivery (COD)</span>
+            <span>↓</span>
+        </div>
+        <div id="cod-form" class="method-content">
+            <p style="font-size: 13px; color: #666;">Pay at your doorstep when you receive the order.</p>
+            <button class="btn-place" style="background:#000; color:#fff;" onclick="finalizeOrder('COD_ORDER', 'Pending (COD)', 'Cash on Delivery')">CONFIRM COD ORDER</button>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        <div style="display: flex; justify-content: space-between; font-size: 18px;">
+            <span>TOTAL AMOUNT</span>
+            <span>₹<span id="final-amt">0</span></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cashfree = Cashfree({ mode: "sandbox" });
+    let globalTotal = 0;
+
+    function toggleMethod(id) {
+        document.querySelectorAll('.method-content').forEach(content => {
+            if(content.id !== id) content.classList.remove('active');
+        });
+        document.getElementById(id).classList.toggle('active');
+    }
+
+    function loadAmount() {
+        let cart = JSON.parse(localStorage.getItem('userCart')) || [];
+        globalTotal = 0;
+        cart.forEach(item => {
+            let price = typeof item.price === 'string' ? parseInt(item.price.replace(/[₹,]/g, '')) : item.price;
+            globalTotal += (price * (item.quantity || 1));
+        });
+        document.getElementById('final-amt').innerText = globalTotal.toLocaleString('en-IN');
+    }
+
+    async function startCashfreePayment(method) {
+        let userData = JSON.parse(localStorage.getItem('userData'));
+        if (!userData) return alert("Please Login First!");
+
+        alert("Simulating Cashfree Secure Gateway for " + method + "...");
+        
+        setTimeout(() => {
+            finalizeOrder("CF_TEST_" + Math.floor(Math.random() * 1000000), "Paid (Online)", method);
+        }, 1500);
+    }
+
+    async function finalizeOrder(transactionId, orderStatus, methodUsed) {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const cart = JSON.parse(localStorage.getItem('userCart')) || [];
+        
+        const orderData = {
+            customerName: userData.name,
+            customerEmail: userData.email,
+            shippingAddress: userData.address || "Address in Profile",
+            items: cart,
+            totalAmount: globalTotal,
+            paymentId: transactionId,
+            paymentMethod: methodUsed, // <--- DB mein ab ye dikhayega
+            status: orderStatus,
+            orderDate: new Date()
+        };
+
+        try {
+            const response = await fetch('http://localhost:4000/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
+
+            if (response.ok) {
+                localStorage.removeItem('userCart');
+                alert("🎉 Order Confirmed via " + methodUsed);
+                window.location.href = 'payment-success.html';
+            } else {
+                alert("Error saving order!");
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            alert("Backend Server not responding!");
+        }
+    }
+
+    window.onload = loadAmount;
+</script>
+
+</body>
+</html>

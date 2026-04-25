@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account | ESSENTIAL HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #ffffff; --acc: #000; --muted: #888; --border: #eee; }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; color: #000; }
+        
+        /* Premium Center Card */
+        .auth-box { width: 100%; max-width: 400px; padding: 40px; text-align: center; }
+        
+        /* ESSENTIAL HUB Text Logo */
+        .logo { font-weight: 800; letter-spacing: 5px; text-decoration: none; color: #000; display: block; margin-bottom: 50px; font-size: 20px; text-transform: uppercase; }
+        
+        h2 { font-size: 26px; letter-spacing: -1px; margin-bottom: 10px; font-weight: 600; }
+        .toggle-text { color: var(--muted); font-size: 13px; margin-bottom: 30px; }
+        .toggle-text span { color: #000; cursor: pointer; font-weight: 600; text-decoration: underline; }
+
+        /* Input Fields */
+        .input-group { margin-bottom: 15px; }
+        .input-group input { width: 100%; padding: 16px; border: 1px solid var(--border); border-radius: 2px; box-sizing: border-box; font-size: 14px; transition: 0.3s; }
+        .input-group input:focus { border-color: #000; outline: none; }
+
+        /* Premium Black Button */
+        .btn-black { width: 100%; padding: 18px; background: #000; color: #fff; border: none; font-weight: 600; cursor: pointer; letter-spacing: 1px; margin-top: 10px; transition: 0.3s; border-radius: 2px; }
+        .btn-black:hover { opacity: 0.8; }
+        
+        /* Sections to Toggle */
+        #otp-section, #forgot-section, #profile-view { display: none; }
+
+        /* Profile Details Box */
+        .profile-view { text-align: left; background: #f9f9f9; padding: 30px; border-radius: 4px; border: 1px solid #eee; }
+        .info-row { margin-bottom: 20px; }
+        .info-row label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .info-row p { margin: 5px 0 0; font-size: 16px; font-weight: 500; }
+
+        .forgot-link { font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; margin-top: 15px; display: block; }
+    </style>
+</head>
+<body>
+    
+<div style="position: absolute; top: 30px; left: 30px;">
+    <a href="javascript:history.back()" style="color: #000; text-decoration: none; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: 1px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        BACK
+    </a>
+</div>
+<div class="auth-box">
+    <a href="index.html" class="logo">ESSENTIAL HUB</a>
+
+    <div id="auth-form">
+        <h2 id="form-title">Sign In</h2>
+        <p class="toggle-text" id="toggle-msg">Don't have an account? <span onclick="toggleAuth()">Sign Up</span></p>
+
+        <div id="main-inputs">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Username">
+            </div>
+            <div id="signup-only" style="display: none;">
+                <div class="input-group">
+                    <input type="text" id="phone" placeholder="Phone Number (+91...)">
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password">
+            </div>
+            <button class="btn-black" onclick="initiateOTP()">SEND OTP</button>
+            <span class="forgot-link" id="f-link" onclick="showForgot()">Forgot Details?</span>
+        </div>
+
+        <div id="otp-section">
+            <p style="font-size: 13px; color: #555;">Verify OTP to continue</p>
+            <div class="input-group">
+                <input type="text" id="otp-input" placeholder="Enter 4-Digit Code">
+            </div>
+            <button class="btn-black" onclick="verifyAndFinish()">VERIFY & PROCEED</button>
+            <p onclick="initiateOTP()" style="font-size: 11px; cursor: pointer; margin-top: 15px; text-decoration: underline;">Resend Code</p>
+        </div>
+    </div>
+
+    <div id="forgot-section">
+        <h2>Recover Details</h2>
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Enter your registered phone number.</p>
+        <div class="input-group">
+            <input type="text" id="recover-phone" placeholder="Phone Number">
+        </div>
+        <button class="btn-black" onclick="handleRecovery()">SEND RECOVERY OTP</button>
+        <p onclick="location.reload()" style="font-size: 11px; cursor: pointer; margin-top: 15px; text-decoration: underline;">Back to Login</p>
+    </div>
+
+    <div id="profile-view" class="profile-view">
+        <h2>My Account</h2>
+        <div class="info-row">
+            <label>Username</label>
+            <p id="disp-user"></p>
+        </div>
+        <div class="info-row">
+            <label>Member Status</label>
+            <p>Premium Essential Member</p>
+        </div>
+        <button class="btn-black" onclick="logout()">LOGOUT</button>
+        <p style="text-align: center; margin-top: 20px; font-size: 12px; cursor: pointer; text-decoration: underline;" onclick="logout()">Switch Account</p>
+    </div>
+</div>
+
+<script>
+    // Logic: Multiple Users (Simulated database)
+    let isLoginMode = true;
+    let generatedOTP = null;
+    let recoveryMatch = null;
+
+    // Toggle Sign In / Sign Up
+    function toggleAuth() {
+        isLoginMode = !isLoginMode;
+        document.getElementById('form-title').innerText = isLoginMode ? "Sign In" : "Sign Up";
+        document.getElementById('toggle-msg').innerHTML = isLoginMode ? 
+            "Don't have an account? <span onclick='toggleAuth()'>Sign Up</span>" : 
+            "Already have an account? <span onclick='toggleAuth()'>Sign In</span>";
+        document.getElementById('signup-only').style.display = isLoginMode ? "none" : "block";
+        
+        document.getElementById('main-inputs').style.display = "block";
+        document.getElementById('otp-section').style.display = "none";
+        document.getElementById('f-link').style.display = isLoginMode ? "block" : "none";
+    }
+
+    // OTP initiation
+    function initiateOTP() {
+        const u = document.getElementById('username').value;
+        const p = document.getElementById('password').value;
+        if(!u || !p) return alert("Security: Please enter credentials.");
+
+        // OTP simulation
+        generatedOTP = Math.floor(1000 + Math.random() * 9000);
+        alert("ESSENTIAL HUB SECURITY CODE: " + generatedOTP);
+
+        document.getElementById('main-inputs').style.display = "none";
+        document.getElementById('otp-section').style.display = "block";
+    }
+
+    // --- MAIN FIX START ---
+    function verifyAndFinish() {
+        const code = document.getElementById('otp-input').value;
+        if(code != generatedOTP) return alert("Invalid OTP!");
+
+        const u = document.getElementById('username').value;
+        const p = document.getElementById('password').value;
+        const ph = document.getElementById('phone').value;
+        
+        let allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+
+        if (isLoginMode) {
+            const found = allUsers.find(user => user.username === u && user.password === p);
+            if (found) {
+                // TICKET KA NAAM 'userData' KAR DIYA HAI (Cart.html ke liye)
+                const sessionData = { 
+                    name: found.username, 
+                    email: found.username + "@essentialhub.com", // Simulated email
+                    phone: found.phone 
+                };
+                localStorage.setItem('userData', JSON.stringify(sessionData));
+                
+                alert("Login Successful! Redirecting to Cart...");
+                window.location.href = "cart.html"; // Seedha Cart par bhejo
+            } else {
+                alert("Account not found. Please Sign Up.");
+                location.reload();
+            }
+        } else {
+            if(!ph) return alert("Phone number required.");
+            if(allUsers.find(user => user.username === u)) return alert("Username taken!");
+            
+            const newUser = { username: u, password: p, phone: ph };
+            allUsers.push(newUser);
+            localStorage.setItem('allUsers', JSON.stringify(allUsers));
+            
+            // Signup ke baad bhi 'userData' set karo
+            const sessionData = { 
+                name: u, 
+                email: u + "@essentialhub.com", 
+                phone: ph 
+            };
+            localStorage.setItem('userData', JSON.stringify(sessionData));
+            
+            alert("Welcome to Essential Hub!");
+            window.location.href = "cart.html";
+        }
+    }
+    // --- MAIN FIX END ---
+
+    function showForgot() {
+        document.getElementById('auth-form').style.display = "none";
+        document.getElementById('forgot-section').style.display = "block";
+    }
+
+    function handleRecovery() {
+        const ph = document.getElementById('recover-phone').value;
+        let allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+        recoveryMatch = allUsers.find(user => user.phone === ph);
+
+        if (recoveryMatch) {
+            generatedOTP = Math.floor(1000 + Math.random() * 9000);
+            alert("RECOVERY CODE: " + generatedOTP);
+            
+            document.getElementById('forgot-section').innerHTML = `
+                <h2>Verify Identity</h2>
+                <div class="input-group"><input type="text" id="rec-otp" placeholder="Enter OTP"></div>
+                <button class="btn-black" onclick="revealDetails()">REVEAL DETAILS</button>
+            `;
+        } else {
+            alert("Phone not registered.");
+        }
+    }
+
+    function revealDetails() {
+        if(document.getElementById('rec-otp').value == generatedOTP) {
+            alert("ACCESS GRANTED\n\nUsername: " + recoveryMatch.username + "\nPassword: " + recoveryMatch.password);
+            location.reload();
+        } else {
+            alert("Invalid Code");
+        }
+    }
+
+    window.onload = function() {
+        // Yahan bhi check 'userData' se hoga
+        const current = JSON.parse(localStorage.getItem('userData'));
+        if (current) {
+            document.getElementById('auth-form').style.display = 'none';
+            document.getElementById('profile-view').style.display = 'block';
+            document.getElementById('disp-user').innerText = current.name;
+        }
+    };
+
+    function logout() { 
+        localStorage.removeItem('userData'); 
+        location.reload(); 
+    }
+</script>
+
+</body>
+</html>

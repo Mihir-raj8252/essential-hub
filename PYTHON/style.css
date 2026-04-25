@@ -1,0 +1,808 @@
+html {
+    scroll-behavior: smooth;
+}
+/* 1. Global Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body { 
+    background-color: #1a1a1a; /* Dark Grey Background */
+    color: #ffffff; /* White text for better visibility */
+    font-family: 'Inter', sans-serif; 
+}
+
+/* 2. Navbar */
+.navbar { 
+    background-color: #000; 
+    padding: 20px 0; 
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-content { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    width: 90%; 
+    margin: 0 auto; 
+}
+
+.logo { 
+    color: #ffffff !important; 
+    text-decoration: none; 
+    font-weight: bold; 
+    letter-spacing: 4px; 
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+/* 3. Hero Section */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+.hero h1 {
+    font-weight: 900;
+    letter-spacing: -3px; /* This "tight" look is very premium */
+    font-size: 4rem;
+    text-transform: uppercase;
+    margin: 10px 0;
+}
+
+.hero p {
+    letter-spacing: 5px; /* Contrast the tight heading with a wide subtitle */
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.search-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.main-search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #444; 
+    padding: 12px 20px;
+    width: 100%;
+    max-width: 600px;
+    background: #222;
+}
+
+.main-search-bar input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 14px;
+}
+
+/* 4. Product Grid & Cards */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px 5%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.product-card {
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Very faint border */
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 5. Fix for Product Photos */
+.img-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Makes it a perfect square */
+    background-color: #333; /* Grey box where photo goes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.product-card h3 {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.price {
+    color: #bbb;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+/* 6. Buttons */
+.add-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #fff;
+    color: #000;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.add-btn:hover {
+    background: #e0e0e0;
+    transform: scale(1.02); /* Very subtle pop */
+}
+/* Fixes the Right side of Navbar */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Spacing between Cart and Profile */
+    position: relative;
+}
+
+.cart-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+#cart-count {
+    background: #fff;
+    color: #000;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-size: 10px;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.profile-container {
+    position: relative;
+    cursor: pointer;
+}
+
+/* The Profile Popup Box */
+.profile-card {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: #222;
+    border: 1px solid #444;
+    padding: 15px;
+    width: 180px;
+    text-align: center;
+    z-index: 1001;
+}
+
+.profile-card p {
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.logout-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 5px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.show { display: block !important; }
+/* Add to bottom of style.css */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-link {
+    text-decoration: none;
+    color: white;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+#cart-count {
+    background: white;
+    color: black;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+/* Add to bottom of style.css */
+.main-search-bar {
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    background: transparent !important;
+    transition: all 0.3s ease;
+}
+
+.main-search-bar:focus-within {
+    border-color: #ffffff !important;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+.menu-container a {
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+}
+
+.menu-container a:hover {
+    opacity: 0.6;
+}
+.cart-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.cart-btn:hover {
+    opacity: 0.7;
+}
+
+#cart-count {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: #fff; /* White background for the count */
+    color: #000;            /* Black number */
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 50%;     /* Makes it a circle */
+    min-width: 15px;
+    text-align: center;
+}
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Adds space between cart and profile */
+}
+
+/* Make sure the profile icon is also white */
+.profile-icon svg {
+    stroke: white;
+}
+/* Container for the image to keep them all the same size */
+/* 1. Ensure the grid stays a grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    /* This prevents the "jumping" layout */
+    align-items: start; 
+}
+
+.img-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4; 
+    background-color: #1a1a1a;
+    overflow: hidden;
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.secondary-img {
+    opacity: 0;
+}
+
+/* Only show the second image when hovering the card */
+.product-card:hover .secondary-img {
+    opacity: 1;
+}
+
+.product-card:hover .primary-img {
+    opacity: 0;
+}
+.img-container {
+    position: relative;
+    z-index: 1; /* Isse container base layer ban jayega */
+}
+
+.img-container img {
+    pointer-events: none; /* Sabse important! Isse photo click ko block nahi karegi */
+}
+
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+}
+
+/* Show arrows when hovering over the card */
+.product-card:hover .nav-arrow {
+    opacity: 1;
+}
+
+.prev { left: 5px; }
+.next { right: 5px; }
+
+.nav-arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+}
+
+.filter-group, .sort-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Custom Range Slider */
+input[type="range"] {
+    accent-color: #fff;
+    cursor: pointer;
+}
+
+/* Minimal Dropdown */
+select {
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 8px 12px;
+    outline: none;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+/* Wishlist and Tag Overlay */
+.wishlist-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 22px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.product-tag {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: #fff;
+    color: #000;
+    padding: 4px 10px;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Price and Ratings Styling */
+.price-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 13px;
+}
+
+.discount {
+    color: #4CAF50; /* Green discount text */
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #bbb;
+    margin: 8px 0;
+}
+
+.star {
+    color: #fff;
+    font-weight: bold;
+}
+.site-footer {
+    background-color: #000;
+    color: #fff;
+    padding: 80px 5% 40px;
+    border-top: 1px solid #222;
+    font-family: 'Inter', sans-serif;
+    margin-top: 50px;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1.5fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.footer-logo {
+    font-size: 24px;
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+}
+
+.footer-tagline {
+    font-size: 12px;
+    color: #888;
+    letter-spacing: 2px;
+}
+
+.link-group h3, .footer-newsletter h3 {
+    font-size: 14px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.link-group ul {
+    list-style: none;
+    padding: 0;
+}
+
+.link-group ul li {
+    margin-bottom: 12px;
+}
+
+.link-group ul li a {
+    color: #888;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.3s ease;
+}
+
+.link-group ul li a:hover {
+    color: #fff;
+}
+
+.newsletter-input {
+    display: flex;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+
+.newsletter-input input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 10px 0;
+    width: 100%;
+    outline: none;
+}
+
+.newsletter-input button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1px;
+    padding-left: 10px;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #222;
+    padding-top: 30px;
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 1px;
+}
+
+.social-icons a {
+    color: #888;
+    text-decoration: none;
+    margin-left: 20px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #fff;
+}
+
+/* Responsive Fix */
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .newsletter-input {
+        justify-content: center;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+#bag-items-container {
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto; /* Adds a scrollbar if you add too many items */
+    color: white;     /* Ensures text is white */
+}
+/* The Bag Container (Hidden by default) */
+#cart-sidebar {
+    display: none; /* Hidden */
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 350px;
+    background: #111;
+    border: 1px solid #333;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Class to show the bag */
+#cart-sidebar.active {
+    display: block;
+}
+/* Improved Cart Sidebar */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Hidden by default */
+    width: 350px;
+    height: 100vh;
+    background: #000;
+    border-left: 1px solid #333;
+    transition: right 0.3s ease-in-out;
+    z-index: 2000;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-sidebar.active {
+    right: 0; /* Slides in */
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.close-cart {
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Ensure the Profile Dropdown shows up */
+.show {
+    display: block !important;
+}
+.philosophy-section {
+    background-color: #000;
+    padding: 100px 5%;
+    color: #fff;
+}
+
+.philosophy-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.philosophy-image {
+    flex: 1;
+}
+
+.philosophy-image img {
+    width: 100%;
+    height: auto;
+    filter: grayscale(100%); /* Premium black & white look ke liye */
+}
+
+.philosophy-content {
+    flex: 1;
+}
+
+.sub-title {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #888;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.main-title {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 30px;
+    letter-spacing: -1px;
+}
+
+.description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #bbb;
+    margin-bottom: 40px;
+    max-width: 500px;
+}
+
+.learn-more {
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: opacity 0.3s ease;
+}
+
+.learn-more:hover {
+    opacity: 0.7;
+}
+
+/* Mobile responsive karne ke liye */
+@media (max-width: 768px) {
+    .philosophy-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .main-title {
+        font-size: 32px;
+    }
+    .description {
+        margin: 0 auto 30px;
+    }
+    .learn-more {
+        justify-content: center;
+    }
+}
+/* 1. Dono cheezon ko side-by-side laane ke liye */
+.philosophy-container {
+    display: flex;
+    gap: 50px;
+    padding: 80px;
+    background: black;
+    align-items: center;
+}
+
+/* 2. Photo ka size set karne ke liye */
+.philosophy-image img {
+    width: 100%;
+    max-width: 500px; /* Isse photo ek side me rahegi */
+    height: auto;
+}
+
+/* 3. Text ko sundar banane ke liye */
+.philosophy-content h1 {
+    font-size: 40px;
+    color: white;
+    margin-bottom: 20px;
+}
+/* This puts the photo and text side-by-side */
+.product-page {
+    display: flex;
+    gap: 50px;
+    padding: 50px;
+    background: #1a1a1a; /* Matching your dark theme */
+    color: white;
+}
+
+.photo-side { flex: 1; }
+.info-side { flex: 1; }
+
+.size-btn {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.buy-btn {
+    background: white;
+    color: black;
+    padding: 15px 40px;
+    font-weight: bold;
+    border: none;
+    width: 100%;
+}
+/* This ensures the link is behind the buttons but in front of the image */
+.img-container a {
+    position: relative;
+    z-index: 1;
+    display: block;
+}
+
+.nav-arrow, .wishlist-icon {
+    z-index: 10; /* This keeps your buttons working */
+}
+@media (max-width: 600px) {
+    /* 1. Product Container ko 2 columns mein baantein */
+    .product-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important; /* Ye magic line hai jo 2 slot banayegi */
+        gap: 15px !important; /* Do products ke beech ki jagah */
+        padding: 10px !important;
+    }
+
+    /* 2. Image ko box ke hisaab se adjust karein */
+    .product-card img {
+        width: 100% !important;
+        height: auto !important;
+        border-radius: 8px;
+    }
+
+    /* 3. Text thoda chota karein taaki 2 ke slot mein fit aaye */
+    .product-card h3 {
+        font-size: 14px !important;
+        margin-top: 8px;
+    }
+
+    .product-card p {
+        font-size: 13px !important;
+    }
+}

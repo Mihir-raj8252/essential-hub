@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | ESSENTIAL HUB</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #ffffff; --text: #000000; --card: #f9f9f9; --border: #eee; --accent: #000; --gray: #888; }
+        .dark-mode { --bg: #111111; --text: #ffffff; --card: #1a1a1a; --border: #333; --accent: #fff; --gray: #555; }
+
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; transition: 0.3s; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        .navbar { background: #000; padding: 20px 0; }
+        .nav-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; padding: 0 20px; align-items: center; }
+        .logo { color: #fff; text-decoration: none; font-weight: 900; letter-spacing: 3px; font-size: 1.2rem; }
+        .back-link { color: #fff; text-decoration: none; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+
+        .settings-container { max-width: 800px; margin: 50px auto; padding: 0 20px; flex: 1; width: 100%; box-sizing: border-box; }
+        .section-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 8px; margin-bottom: 20px; }
+        .section-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 20px; display: block; }
+
+        .order-item { display: flex; flex-direction: column; padding: 20px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
+        .order-item:hover { opacity: 0.7; }
+        .order-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        
+        .tracker-wrapper { margin: 25px 0 10px 0; position: relative; }
+        .tracker-container { width: 100%; background: var(--border); height: 4px; border-radius: 10px; position: relative; }
+        .tracker-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .tracker-steps { display: flex; justify-content: space-between; margin-top: -9px; position: relative; }
+        .step-dot { width: 14px; height: 14px; background: var(--border); border-radius: 50%; border: 3px solid var(--bg); transition: 0.5s; }
+        .step-dot.active { background: var(--accent); }
+        
+        .step-labels { display: flex; justify-content: space-between; margin-top: 10px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); }
+        .label-active { color: var(--text); }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: var(--bg); color: var(--text); padding: 30px; border-radius: 12px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; font-weight: 900; }
+
+        .btn-edit { background: var(--text); color: var(--bg); border: none; padding: 10px 20px; font-weight: 700; cursor: pointer; border-radius: 4px; font-size: 11px; }
+        .btn-logout { background: #ff4444; color: white; border: none; padding: 12px; font-weight: 700; cursor: pointer; border-radius: 4px; font-size: 11px; width: 100%; margin-top: 10px; }
+        
+        input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 4px; }
+
+        .lang-select { background: none; color: var(--text); border: 1px solid var(--border); padding: 5px; font-size: 12px; border-radius: 4px; outline: none; }
+        .site-footer { background: #000; color: #fff; padding: 40px; text-align: center; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-content">
+        <a href="index.html" class="logo">ESSENTIAL HUB</a>
+        <a href="javascript:history.back()" class="back-link">← <span class="ln" data-en="BACK" data-hi="पीछे">BACK</span></a>
+    </div>
+</nav>
+
+<div class="settings-container">
+    <h1 class="ln" data-en="Account Settings" data-hi="अकाउंट सेटिंग्स">Account Settings</h1>
+
+    <div class="section-card">
+        <span class="section-title ln" data-en="Edit Profile" data-hi="प्रोफ़ाइल बदलें">Edit Profile</span>
+        <p><strong><span class="ln" data-en="Name" data-hi="नाम">Name</span>:</strong> <span id="prof-name">...</span></p>
+        <p><strong>Email:</strong> <span id="prof-email">...</span></p>
+        <button class="btn-edit ln" onclick="openEditModal()" data-en="EDIT DETAILS" data-hi="विवरण बदलें">EDIT DETAILS</button>
+    </div>
+
+    <div class="section-card">
+        <span class="section-title ln" data-en="Order History & Tracking" data-hi="ऑर्डर हिस्ट्री और ट्रैकिंग">Order History & Tracking</span>
+        <div id="settings-orders">
+            <p style="font-size: 12px; color: #888;">Fetching your orders...</p>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <span class="section-title ln" data-en="Preferences" data-hi="प्राथमिकताएं">Preferences</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+            <span class="ln" data-en="Dark Mode" data-hi="डार्क मोड">Dark Mode</span>
+            <input type="checkbox" id="theme-toggle" onclick="toggleTheme()">
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+            <span class="ln" data-en="Language" data-hi="भाषा">Language</span>
+            <select class="lang-select" onchange="changeLang(this.value)" id="lang-picker">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+            </select>
+        </div>
+        <hr style="border:0; border-top:1px solid var(--border); margin: 20px 0;">
+        <button class="btn-logout ln" onclick="userLogout()" data-en="LOGOUT / SWITCH ACCOUNT" data-hi="लॉगआउट / अकाउंट बदलें">LOGOUT / SWITCH ACCOUNT</button>
+    </div>
+</div>
+
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeEditModal()">&times;</span>
+        <h2 class="ln" data-en="Update Profile" data-hi="प्रोफ़ाइल अपडेट करें">Update Profile</h2>
+        <label class="ln" data-en="New Name:" data-hi="नया नाम:">New Name:</label>
+        <input type="text" id="new-name-input" placeholder="Enter your name">
+        <button class="btn-edit" onclick="saveProfile()" style="width: 100%; margin-top: 10px;">SAVE CHANGES</button>
+    </div>
+</div>
+
+<div id="orderModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2 id="m-id">Order Details</h2>
+        <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
+        <div id="m-body" style="font-size: 13px; line-height: 1.6;"></div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    &copy; 2026 ESSENTIAL HUB. <span class="ln" data-en="MINIMAL • PREMIUM • CLEAN" data-hi="मिनिमल • प्रीमियम • क्लीन">MINIMAL • PREMIUM • CLEAN</span>
+</footer>
+
+<script>
+    let allOrders = [];
+
+    window.onload = function() {
+        if(localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-toggle').checked = true;
+        }
+
+        const savedLang = localStorage.getItem('appLang') || 'en';
+        document.getElementById('lang-picker').value = savedLang;
+        changeLang(savedLang);
+        
+        loadUserProfile();
+    };
+
+    function loadUserProfile() {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if(userData) {
+            document.getElementById('prof-name').innerText = userData.name;
+            document.getElementById('prof-email').innerText = userData.email;
+            fetchOrders(userData.email);
+        } else {
+            window.location.href = "login.html";
+        }
+    }
+
+    async function fetchOrders(email) {
+        const container = document.getElementById('settings-orders');
+        try {
+            const response = await fetch(`http://localhost:4000/api/user-orders/${email}`);
+            allOrders = await response.json();
+            
+            if (!allOrders || allOrders.length === 0) {
+                container.innerHTML = `<p style="color:#888; font-size:13px;">No orders found.</p>`;
+                return;
+            }
+
+            container.innerHTML = allOrders.map((order) => {
+                let progress = "10%"; let d1="active", d2="", d3="";
+                if(order.status === 'Shipped') { progress = "50%"; d2="active"; }
+                else if(order.status === 'Delivered') { progress = "100%"; d2="active"; d3="active"; }
+
+                return `
+                    <div class="order-item" onclick="openOrderDetail('${order._id}')">
+                        <div class="order-header">
+                            <div><span style="font-weight:900;">#${order._id.slice(-6).toUpperCase()}</span><br>
+                            <small style="color:#888;">${new Date(order.orderDate).toLocaleDateString()}</small></div>
+                            <div style="text-align:right;"><span style="font-weight:700;">₹${order.totalAmount}</span><br>
+                            <span style="font-size:9px; font-weight:800; text-transform:uppercase; color:#888;">${order.status}</span></div>
+                        </div>
+                        <div class="tracker-wrapper">
+                            <div class="tracker-container"><div class="tracker-fill" style="width: ${progress}"></div></div>
+                            <div class="tracker-steps"><div class="dot step-dot ${d1}"></div><div class="dot step-dot ${d2}"></div><div class="dot step-dot ${d3}"></div></div>
+                            <div class="step-labels"><span>Ordered</span><span>Shipped</span><span>Delivered</span></div>
+                        </div>
+                    </div>`;
+            }).join('');
+        } catch (err) { container.innerHTML = `<p style="color:red;">Server Error.</p>`; }
+    }
+
+    // --- EDIT PROFILE LOGIC ---
+    function openEditModal() {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        document.getElementById('new-name-input').value = userData.name;
+        document.getElementById('editModal').style.display = 'flex';
+    }
+    function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
+    
+    function saveProfile() {
+        const newName = document.getElementById('new-name-input').value;
+        if(newName.trim() === "") return alert("Name cannot be empty");
+        
+        let userData = JSON.parse(localStorage.getItem('userData'));
+        userData.name = newName;
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        document.getElementById('prof-name').innerText = newName;
+        closeEditModal();
+        alert("Profile Updated!");
+    }
+
+    function userLogout() {
+        localStorage.removeItem('userData');
+        alert("Logging out...");
+        window.location.href = "login.html";
+    }
+
+    function openOrderDetail(id) {
+        const order = allOrders.find(o => o._id === id);
+        if(!order) return;
+        document.getElementById('m-id').innerText = "Order #" + id.slice(-6).toUpperCase();
+        document.getElementById('m-body').innerHTML = `
+            <p><strong>Status:</strong> ${order.status}</p>
+            <p><strong>Address:</strong> ${order.shippingAddress.address}, ${order.shippingAddress.city}</p>
+            <hr style="border:0; border-top:1px solid var(--border);">
+            <p><strong>Items:</strong></p>
+            ${order.items.map(i => `<div style="display:flex; justify-content:space-between;"><span>${i.name} (x${i.quantity})</span><span>₹${i.price}</span></div>`).join('')}
+            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+            <div style="display:flex; justify-content:space-between; font-weight:900;"><span>Total:</span><span>₹${order.totalAmount}</span></div>
+        `;
+        document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
+    function changeLang(lang) {
+        localStorage.setItem('appLang', lang);
+        document.querySelectorAll('.ln').forEach(el => {
+            const trans = el.getAttribute(`data-${lang}`);
+            if(trans) el.innerText = trans;
+        });
+    }
+    window.onclick = (e) => { 
+        if(e.target.id === 'orderModal') closeModal(); 
+        if(e.target.id === 'editModal') closeEditModal();
+    }
+</script>
+
+</body>
+</html>

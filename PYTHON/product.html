@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | Essential Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #ffffff; color: #111; font-family: 'Inter', sans-serif; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* --- PREMIUM BLACK NAVBAR --- */
+        .navbar { background: #000; padding: 18px 0; position: sticky; top: 0; z-index: 1000; }
+        .nav-content { display: flex; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 20px; align-items: center; }
+        .logo { text-decoration: none; color: white; font-weight: 900; letter-spacing: 3px; font-size: 1.1rem; text-transform: uppercase; }
+        
+        .nav-left-group { display: flex; align-items: center; gap: 20px; }
+        .back-btn { color: #fff; text-decoration: none; font-size: 12px; display: flex; align-items: center; gap: 5px; letter-spacing: 1px; font-weight: 600; }
+        
+        .cart-link { color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        #cart-count { background: #fff; color: #000; border-radius: 50%; padding: 2px 7px; font-size: 10px; font-weight: 900; }
+
+        /* --- PRODUCT GRID --- */
+        .pdp-wrapper { max-width: 1200px; margin: 40px auto; padding: 20px; flex: 1; }
+        .pdp-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: start; }
+        
+        .main-img-box {
+            position: relative;
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            border-radius: 4px;
+            background: #f9f9f9;
+            aspect-ratio: 3/4;
+        }
+
+        .main-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            color: #000;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .slider-btn:hover { background: #000; color: #fff; }
+        .prev-btn { left: 15px; }
+        .next-btn { right: 15px; }
+
+        .brand-label { font-weight: 800; letter-spacing: 2px; font-size: 11px; color: #888; margin-bottom: 10px; text-transform: uppercase; }
+        .p-title { font-size: 32px; font-weight: 700; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: -0.5px; }
+        .curr-price { font-size: 24px; font-weight: 600; color: #000; margin-bottom: 30px; display: block; }
+
+        .size-box { display: flex; gap: 10px; margin: 15px 0 35px; }
+        .size-btn { width: 50px; height: 50px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-weight: 700; transition: 0.3s; font-family: inherit; }
+        .size-btn.active { background: #000; color: #fff; border-color: #000; transform: scale(1.05); }
+
+        .action-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .cart-btn { background: #000; color: #fff; padding: 20px; border: none; font-weight: 700; cursor: pointer; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; }
+        .buy-btn { background: #fff; color: #000; border: 1px solid #000; padding: 20px; font-weight: 700; cursor: pointer; font-size: 14px; text-transform: uppercase; }
+
+        .extra-info-container { margin-top: 60px; border-top: 1px solid #eee; }
+        .tab-headers { display: flex; gap: 30px; border-bottom: 1px solid #eee; }
+        .tab-link { background: none; border: none; padding: 20px 0; cursor: pointer; font-weight: 700; font-size: 11px; color: #aaa; letter-spacing: 1px; position: relative; }
+        .tab-link.active { color: #000; }
+        .tab-link.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: #000; }
+        .tab-content { display: none; padding: 30px 0; line-height: 1.8; color: #444; font-size: 14px; }
+
+        .site-footer { background: #000; color: #fff; padding: 40px 20px 20px; margin-top: 80px; }
+        .footer-bottom { max-width: 1200px; margin: 20px auto 0; padding-top: 20px; border-top: 1px solid #222; display: flex; justify-content: space-between; font-size: 11px; color: #555; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-content">
+        <div class="nav-left-group">
+            <a href="index.html" class="back-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                BACK
+            </a>
+            <a href="index.html" class="logo">ESSENTIAL HUB</a>
+        </div>
+        <div class="nav-right">
+            <a href="cart.html" class="cart-link">
+                BAG <span id="cart-count">0</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="pdp-wrapper">
+    <div class="pdp-grid">
+        <div class="main-img-box">
+            <button class="slider-btn prev-btn" onclick="changeSlide(-1)">❮</button>
+            <img src="" id="big-photo" alt="Product Image">
+            <button class="slider-btn next-btn" onclick="changeSlide(1)">❯</button>
+        </div>
+
+        <div class="details-section">
+            <p class="brand-label">ESSENTIAL HUB</p>
+            <h1 class="p-title" id="p-name">Loading...</h1>
+            <span class="curr-price" id="p-price">₹0</span>
+
+            <p style="font-weight: 700; font-size: 11px; margin-bottom: 10px; letter-spacing: 1px;">SELECT SIZE</p>
+            <div class="size-box" id="size-selector">
+                <button class="size-btn" onclick="selectSize(this)">S</button>
+                <button class="size-btn" onclick="selectSize(this)">M</button>
+                <button class="size-btn" onclick="selectSize(this)">L</button>
+                <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+
+            <div class="action-row">
+                <button class="cart-btn" onclick="addToBag()">ADD TO BAG</button>
+                <button class="buy-btn" onclick="buyNow()">BUY IT NOW</button>
+            </div>
+
+            <div class="extra-info-container">
+                <div class="tab-headers">
+                    <button class="tab-link active" onclick="openTab(event, 'Desc')">DESCRIPTION</button>
+                    <button class="tab-link" onclick="openTab(event, 'Ship')">SHIPPING</button>
+                </div>
+                <div id="Desc" class="tab-content" style="display: block;">
+                    <p id="p-fabric" style="font-weight: 700; margin-bottom: 10px;"></p>
+                    <p id="p-desc">Loading description...</p>
+                </div>
+                <div id="Ship" class="tab-content">
+                    <p><strong>Fast Dispatch:</strong> Within 24-48 hours.</p>
+                    <p><strong>Shipping:</strong> 3-5 days delivery across India.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-bottom">
+        <p>&copy; 2026 ESSENTIAL HUB.</p>
+        <p>MADE FOR THE STREETS</p>
+    </div>
+</footer>
+
+<script>
+    // ✅ URL Fix for Backend
+    const BASE_URL = "http://localhost:4000/";
+    let currentProduct = null;
+    let selectedSize = null;
+    let currentImgIndex = 0;
+
+    window.onload = loadProductDetails;
+
+    async function loadProductDetails() {
+        const productId = localStorage.getItem('selectedProductId');
+        if (!productId || productId === "undefined") {
+            window.location.href = "index.html";
+            return;
+        }
+
+        try {
+            const response = await fetch(`${BASE_URL}api/products/${productId}`);
+            if (!response.ok) throw new Error("Product not found");
+
+            currentProduct = await response.json();
+
+            // UI Update
+            document.getElementById('p-name').innerText = currentProduct.name;
+            document.getElementById('p-price').innerText = "₹" + currentProduct.price.toLocaleString('en-IN');
+            
+            // ✅ Fix: Initial Image Load with Server Path
+            const images = getProductImages();
+            document.getElementById('big-photo').src = images[0];
+
+            if (currentProduct.fabric) document.getElementById('p-fabric').innerText = currentProduct.fabric;
+            if (currentProduct.description) document.getElementById('p-desc').innerText = currentProduct.description;
+
+            updateCartCount();
+
+        } catch (err) {
+            console.error("Fetch Error:", err);
+        }
+    }
+
+    // --- ✨ SLIDER LOGIC WITH BACKEND PATHS ---
+    function getProductImages() {
+        if (currentProduct && currentProduct.images && currentProduct.images.length > 0) {
+            // ✅ Backend URL prepend kar rahe hain har image pe
+            return currentProduct.images.map(img => img.startsWith('http') ? img : BASE_URL + img);
+        }
+        // Fallback for single image
+        const singleImg = currentProduct?.image || "images/tee4.jpg";
+        return [singleImg.startsWith('http') ? singleImg : BASE_URL + singleImg];
+    }
+
+    function changeSlide(direction) {
+        const images = getProductImages();
+        if (images.length <= 1) return;
+
+        currentImgIndex += direction;
+        if (currentImgIndex >= images.length) currentImgIndex = 0;
+        if (currentImgIndex < 0) currentImgIndex = images.length - 1;
+
+        const imgElement = document.getElementById('big-photo');
+        imgElement.style.opacity = 0;
+        
+        setTimeout(() => {
+            imgElement.src = images[currentImgIndex];
+            imgElement.style.opacity = 1;
+        }, 200);
+    }
+
+    function selectSize(btn) {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedSize = btn.innerText;
+    }
+
+    function checkAuth() {
+        if (!localStorage.getItem('userData')) {
+            alert("Please login first to continue! 🙏");
+            window.location.href = "login.html";
+            return false;
+        }
+        return true;
+    }
+
+    function addToBag() {
+        if (!checkAuth()) return;
+        if (!selectedSize) return alert("Please select a size first!");
+
+        let cart = JSON.parse(localStorage.getItem('userCart')) || [];
+        const images = getProductImages();
+
+        cart.push({
+            id: currentProduct._id,
+            name: currentProduct.name,
+            price: "₹" + currentProduct.price,
+            image: images[0], // Already has BASE_URL
+            size: selectedSize,
+            quantity: 1
+        });
+        localStorage.setItem('userCart', JSON.stringify(cart));
+        updateCartCount();
+        alert("✅ Success! Added to bag.");
+    }
+
+    function buyNow() {
+        if (!checkAuth()) return;
+        if (!selectedSize) return alert("Please select a size first!");
+        addToBag();
+        window.location.href = "cart.html";
+    }
+
+    function updateCartCount() {
+        let cart = JSON.parse(localStorage.getItem('userCart')) || [];
+        const badge = document.getElementById('cart-count');
+        if (badge) badge.innerText = cart.length;
+    }
+
+    function openTab(evt, tabName) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
+        tablinks = document.getElementsByClassName("tab-link");
+        for (i = 0; i < tablinks.length; i++) tablinks[i].className = tablinks[i].className.replace(" active", "");
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essential Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-content">
+        <div class="menu-container">
+            <div class="menu-dots" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </div>
+            <div id="dropdown" class="dropdown-content">
+                
+                <a href="account-settings.html" style="border-top: 1px solid #333; color: #aaa;">My Account</a>
+            </div>
+        </div>
+
+        <a href="index.html" class="logo">ESSENTIAL HUB</a>
+        
+        <div class="nav-right" style="display: flex; align-items: center; justify-content: flex-end; gap: 15px;">
+            
+            <a href="javascript:void(0)" class="cart-btn" onclick="toggleCart()" style="position: relative; text-decoration: none; color: white; display: flex; align-items: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                    <line x1="3" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span id="cart-count" style="position: absolute; top: -8px; right: -8px; background: white; color: black; font-size: 10px; border-radius: 50%; padding: 2px 5px; font-weight: bold;">0</span>
+            </a>
+
+            <a id="user-nav-link" href="login.html" style="cursor: pointer; color: white; display: flex; align-items: center; text-decoration: none;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>               
+
+            <div id="profile-card" class="profile-card" style="display: none; position: absolute; right: 0; top: 40px; background: #111; padding: 15px; border: 1px solid #333; border-radius: 8px; width: 150px; z-index: 1000;">
+                <p style="color: white; margin-bottom: 10px;"><strong id="user-display-name">User</strong></p>
+                <button class="logout-btn" onclick="userLogout()" style="width: 100%; padding: 5px; cursor: pointer;">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="search-wrapper">
+        <div class="main-search-bar">
+            <input type="text" id="main-search-input" placeholder="Search essentialhub" onkeyup="searchProducts()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+    </div>
+    <div class="badge">Collection 2026</div>
+    <h1>Essential Style</h1>
+    <p>Minimal • Premium • Clean</p>
+</header>
+
+<main class="container">
+    <div class="controls-container">
+        <div class="filter-group">
+            <label for="price-filter">Max Price:</label>
+            <input type="range" id="price-filter" min="0" max="10000" step="500" value="10000" oninput="updateFilters()">
+            <span id="price-value">₹10,000</span>
+        </div>
+        <div class="sort-group">
+            <select id="sort-options" onchange="updateFilters()">
+                <option value="default">Sort By</option>
+                <option value="low-high">Price: Low to High</option>
+                <option value="high-low">Price: High to Low</option>
+            </select>
+        </div>
+    </div>
+    <div id="product-grid" class="product-grid"></div>
+</main>
+
+<section class="philosophy-section">
+    <div class="philosophy-container">
+        <div class="philosophy-image"><img src="./phil.jpg" alt="Our Philosophy"></div>
+        <div class="philosophy-content">
+            <span class="sub-title">OUR PHILOSOPHY</span>
+            <h2 class="main-title">THE CRAFT OF THE ESSENTIAL.</h2>
+            <p class="description">ESSENTIAL HUB is born from a vision of minimalist aesthetics and premium craftsmanship. We curate essentials that balance modern trends with timeless quality.</p>
+            <a href="#" class="learn-more">LEARN MORE <span>→</span></a>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-brand">
+            <h2 class="footer-logo">ESSENTIAL HUB</h2>
+            <p class="footer-tagline">Minimal • Premium • Clean</p>
+        </div>
+
+        <div class="footer-links">
+            <div class="link-group">
+                <h3>SHOP</h3>
+                <ul>
+                    <li><a href="index.html">New Arrivals</a></li>
+                    <li><a href="index.html">Best Sellers</a></li>
+                    <li><a href="index.html">Collections</a></li>
+                </ul>
+            </div>
+            <div class="link-group">
+                <h3>HELP</h3>
+                <ul>
+                    <li><a href="account-settings.html">Track Order</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-newsletter">
+            <h3>STAY UPDATED</h3>
+            <div class="newsletter-input">
+                <input type="email" placeholder="Your Email">
+                <button type="submit">JOIN</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 ESSENTIAL HUB. All Rights Reserved.</p>
+        <div class="social-icons">
+            <a href="#">IG</a>
+            <a href="#">PN</a>
+            <a href="#">TW</a>
+        </div>
+    </div>
+</footer>
+
+<div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h2>Your Bag</h2>
+        <span class="close-cart" onclick="toggleCart()">&times;</span>
+    </div>
+    <div id="bag-items-container" style="padding: 20px;">
+        <p style="color: #888;">Your bag is empty.</p>
+    </div>
+    <div class="cart-footer">
+        <p>Total: ₹<span id="cart-total">0</span></p>
+        <button class="buy-now-btn" onclick="location.href='./cart.html'" style="width: 100%; padding: 15px; background: white; color: black; font-weight: bold; cursor: pointer; border: none; margin-top: 10px;">
+            BUY NOW
+        </button>
+    </div>
+</div>
+
+<script>
+    // ✅ SEARCH LOGIC ADDED HERE
+    function searchProducts() {
+        const input = document.getElementById('main-search-input').value.toUpperCase();
+        const productGrid = document.getElementById('product-grid');
+        const products = productGrid.getElementsByClassName('product-card'); // Make sure your script.js uses this class
+
+        for (let i = 0; i < products.length; i++) {
+            let title = products[i].querySelector('h3'); // Adjust if your title is in h2 or p
+            if (title) {
+                let textValue = title.textContent || title.innerText;
+                if (textValue.toUpperCase().indexOf(input) > -1) {
+                    products[i].style.display = "";
+                } else {
+                    products[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function checkLoginStatus() {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const userDisplayName = document.getElementById('user-display-name');
+        if(userData && userDisplayName) {
+            userDisplayName.innerText = userData.name;
+        }
+    }
+
+    function userLogout() {
+        localStorage.removeItem('userData');
+        window.location.reload();
+    }
+
+    function toggleMenu() {
+        document.getElementById("dropdown").classList.toggle("show");
+    }
+
+    window.addEventListener('DOMContentLoaded', checkLoginStatus);
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>

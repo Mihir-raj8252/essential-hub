@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Essential Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styling */
+        body { background-color: #ffffff; color: #000; font-family: 'Inter', sans-serif; margin: 0; position: relative; min-height: 100vh; }
+        
+        /* --- BLACK HEADER FIX --- */
+        .navbar { background: #000 !important; border-bottom: none !important; padding: 20px 0; }
+        .logo { color: #fff !important; text-decoration: none; font-weight: bold; letter-spacing: 1px; }
+        .back-link { color: #fff !important; text-decoration: underline; font-size: 13px; }
+
+        .cart-container { max-width: 1100px; margin: 60px auto; padding: 20px; display: grid; grid-template-columns: 1.5fr 1fr; gap: 50px; position: relative; }
+        
+        /* Items Section */
+        .cart-items-section h2 { font-weight: 600; font-size: 24px; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .cart-item { display: flex; gap: 20px; border-bottom: 1px solid #eee; padding: 25px 0; align-items: center; position: relative; background: rgba(255,255,255,0.6); }
+        .serial-no { font-weight: bold; font-size: 18px; color: #888; margin-right: 10px; }
+        .cart-item img { width: 90px; height: 120px; object-fit: cover; border: 1px solid #eee; }
+        .item-details h3 { font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; }
+        .item-details p { color: #555; margin: 5px 0; font-size: 14px; }
+        
+        /* Qty Selector */
+        .qty-box { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .qty-input { width: 60px; padding: 8px; border: 1px solid #ddd; text-align: center; font-weight: bold; }
+        .limit-msg { font-size: 11px; color: #ff4d4d; margin-top: 5px; display: none; }
+
+        /* Address & Summary Section */
+        .checkout-section { background: rgba(249, 249, 249, 0.9); padding: 30px; border: 1px solid #eee; border-radius: 4px; }
+        .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; margin: 25px 0 15px; color: #333; border-left: 3px solid #000; padding-left: 10px; }
+        
+        .input-group input { width: 100%; padding: 12px; border: 1px solid #ddd; margin-bottom: 12px; font-family: inherit; box-sizing: border-box; background: #fff; }
+        
+        .row { display: flex; gap: 10px; }
+        .total-row { display: flex; justify-content: space-between; margin-top: 15px; font-size: 16px; }
+        .final-price { font-size: 22px; font-weight: 700; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px; }
+        
+        .btn-order { width: 100%; padding: 18px; background: #000; color: #fff; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .btn-order:hover { background: #333; }
+        
+        @media (max-width: 850px) { .cart-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-content" style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; padding: 0 20px; align-items: center;">
+        <a href="index.html" class="logo">ESSENTIAL HUB</a>
+        <a href="javascript:history.back()" class="back-link" style="text-decoration: none; display: flex; align-items: center; gap: 5px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            BACK
+        </a>
+    </div>
+</nav>
+
+<div class="cart-container">
+    <div class="cart-items-section">
+        <h2>SHOPPING BAG</h2>
+        <div id="cart-list"></div>
+    </div>
+
+    <div class="checkout-section">
+        <div class="section-title">Contact Information</div>
+        <div class="input-group">
+            <input type="text" id="cust-name" placeholder="Full Name">
+            <input type="text" id="cust-phone" placeholder="Mobile Number">
+            <input type="email" id="cust-email" placeholder="Email ID">
+        </div>
+
+        <div class="section-title">Shipping Address</div>
+        <div class="input-group">
+            <input type="text" id="apt" placeholder="Flat, House no., Building, Apartment">
+            <input type="text" id="street" placeholder="Area, Street, Sector, Village">
+            <input type="text" id="landmark" placeholder="Landmark (e.g. near Apollo Hospital)">
+            
+            <div class="row">
+                <input type="text" id="district" placeholder="District">
+                <input type="text" id="state" placeholder="State">
+            </div>
+            
+            <div class="row">
+                <input type="text" id="pincode" placeholder="Pincode">
+                <input type="text" id="city" placeholder="Town/City">
+            </div>
+        </div>
+
+        <div class="final-price">
+            <div class="total-row">
+                <span>Total Amount:</span>
+                <span>₹<span id="final-total">0</span></span>
+            </div>
+            <button class="btn-order" onclick="proceedToPayment()" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                CHECKOUT 
+                <div class="payment-logos" style="display: flex; gap: 5px; align-items: center; background: white; padding: 2px 8px; border-radius: 4px;">
+                    <img src="https://img.icons8.com/color/48/google-pay.png" width="20" alt="GPay">
+                    <img src="https://download.logo.wine/logo/PhonePe/PhonePe-Logo.wine.png" width="30" style="object-fit: contain;" alt="PhonePe">
+                    <img src="https://img.icons8.com/color/48/paytm.png" width="20" alt="Paytm">
+                </div>
+                <span style="font-size: 18px; margin-left: 5px;">›</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-brand">
+            <h2 class="footer-logo">ESSENTIAL HUB</h2>
+            <p class="footer-tagline">Minimal • Premium • Clean</p>
+        </div>
+        <div class="footer-links">
+            <div class="link-group">
+                <h3>SHOP</h3>
+                <ul>
+                    <li><a href="index.html">New Arrivals</a></li>
+                    <li><a href="index.html">Best Sellers</a></li>
+                </ul>
+            </div>
+            <div class="link-group">
+                <h3>HELP</h3>
+                <ul>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const BASE_URL = "http://localhost:4000/"; // ✅ Fixed Image URL logic
+
+    function checkAuth() {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (!userData) {
+            alert("Please login first");
+            window.location.href = "login.html";
+            return null;
+        }
+        return userData;
+    }
+
+    let cart = JSON.parse(localStorage.getItem('userCart')) || [];
+
+    function renderCart() {
+        const userData = checkAuth();
+        if(!userData) return;
+
+        document.getElementById('cust-email').value = userData.email;
+        const container = document.getElementById('cart-list');
+        let total = 0;
+
+        cart = JSON.parse(localStorage.getItem('userCart')) || [];
+
+        if (cart.length === 0) {
+            container.innerHTML = "<p style='padding: 50px 0; text-align:center;'>Your bag is empty. Start shopping!</p>";
+            document.getElementById('final-total').innerText = "0";
+            return;
+        }
+
+        container.innerHTML = cart.map((item, index) => {
+            let price = typeof item.price === 'string' ? parseInt(item.price.replace(/[₹,]/g, '')) : item.price;
+            let qty = item.quantity || 1;
+            let subtotal = price * qty;
+            total += subtotal;
+
+            // ✅ Image path fix for backend
+            const imgPath = (item.image && item.image.startsWith('http')) ? item.image : BASE_URL + item.image;
+
+            return `
+                <div class="cart-item">
+                    <span class="serial-no">${index + 1}.</span>
+                    <img src="${imgPath}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/150'">
+                    <div class="item-details">
+                        <h3>${item.name}</h3>
+                        <p>Size: <strong>${item.size || 'M'}</strong></p>
+                        <p>Unit Price: ₹${price.toLocaleString('en-IN')}</p>
+                        <div class="qty-box">
+                            <span>Quantity:</span>
+                            <input type="number" class="qty-input" value="${qty}" 
+                                   onchange="changeQty(${index}, this.value)" 
+                                   min="1" max="5">
+                        </div>
+                        <button onclick="deleteItem(${index})" style="margin-top:10px; cursor:pointer; background:none; border:none; text-decoration:underline; font-size:12px; color:red;">Remove Item</button>
+                    </div>
+                    <div style="margin-left: auto; font-weight: bold;">
+                        ₹${subtotal.toLocaleString('en-IN')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        document.getElementById('final-total').innerText = total.toLocaleString('en-IN');
+    }
+
+    function changeQty(index, val) {
+        let newQty = parseInt(val);
+        if (newQty < 1) newQty = 1;
+        if (newQty > 5) newQty = 5;
+        cart[index].quantity = newQty;
+        localStorage.setItem('userCart', JSON.stringify(cart));
+        renderCart();
+    }
+
+    function deleteItem(index) {
+        cart.splice(index, 1);
+        localStorage.setItem('userCart', JSON.stringify(cart));
+        renderCart();
+    }
+
+    async function proceedToPayment() {
+        const userData = checkAuth();
+        if(!userData) return;
+
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const email = document.getElementById('cust-email').value;
+        const address = {
+            apt: document.getElementById('apt').value,
+            street: document.getElementById('street').value,
+            landmark: document.getElementById('landmark').value,
+            district: document.getElementById('district').value,
+            state: document.getElementById('state').value,
+            pincode: document.getElementById('pincode').value,
+            city: document.getElementById('city').value
+        };
+
+        if(!name || !phone || !address.district || !address.state || !address.pincode) {
+            alert("fill the form first.");
+            return;
+        }
+
+        const finalTotal = document.getElementById('final-total').innerText;
+
+        const orderData = {
+            customerName: name,
+            customerPhone: phone,
+            customerEmail: email,
+            shippingAddress: address,
+            items: cart,
+            totalAmount: finalTotal,
+            status: "Pending (COD)",
+            orderDate: new Date()
+        };
+
+        try {
+            const response = await fetch(`${BASE_URL}api/orders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
+
+            if (response.ok) {
+                alert("Order details saved! Redirecting to payment...");
+                window.location.href = 'payment.html';
+            } else {
+                alert("error occured");
+            }
+        } catch (err) {
+            alert("Backend is not connected");
+        }
+    }
+
+    window.onload = renderCart;
+</script>
+</body>
+</html>
